@@ -47,7 +47,7 @@ QString ParseCSV::volume()
     std::string fileName = ":/data.dat";
 //    QFile aFile(":/data.dat");
     QProcess *m_process = new QProcess(this);
-    m_process->start("echo {$PWD}");
+    m_process->start("ls resources/2015Jul19_0.csv");
     m_process->waitForFinished(-1);
     QByteArray bytes = m_process->readAllStandardOutput();
     QString output = QString::fromLocal8Bit(bytes);
