@@ -1,0 +1,5 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file alias="data.dat">resources/2015Jul19_0.csv</file>
+</qresource>
+</RCC>

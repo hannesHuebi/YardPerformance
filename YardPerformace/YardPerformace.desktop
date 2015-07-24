@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=YardPerformace
+Exec=qmlscene $@ YardPerformace/Main.qml
+Icon=YardPerformace/YardPerformace.png
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true
+

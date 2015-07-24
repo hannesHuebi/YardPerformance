@@ -1,0 +1,17 @@
+{
+    "name": "yardperformanceapp.hannes",
+    "description": "description of YardPerformanceApp",
+    "architecture": "@CLICK_ARCH@",
+    "title": "YardPerformanceApp",
+    "hooks": {
+        "YardPerformace": {
+            "apparmor": "YardPerformace/YardPerformace.apparmor",
+            "desktop":  "YardPerformace/YardPerformace.desktop"
+        }
+    },
+    "version": "0.1",
+    "maintainer": "Hannes Lindner <hannes.lindner@posteo.de>",
+    "framework" : "ubuntu-sdk-15.04"
+}
+
+
