@@ -1,89 +1,36 @@
 #include "parsecsv.h"
-#include <iostream>
-#include <fstream>
-#include <string>
-#include "csv.h"
-#include<algorithm>
-#include<iterator>
 #include <QProcess>
-#include <QFile>
+#include "explog.h"
+#include <iostream>
 
 ParseCSV::ParseCSV(QObject *parent) :
     QObject(parent)/*,
-                m_volume("")*/
+                    m_volume("")*/
 {
+    myLog.start_daemon("5010");
+    myLog.set_time_range(1);
+    setlocale(LC_NUMERIC,"C");
 }
 
-void ParseCSV::set_values(double inLenght, double inWidth, double inHeight)
+void ParseCSV::ReReadValues()
 {
-    m_lenght = inLenght;
-    m_width = inWidth;
-    m_height = inHeight;
+    qDebug("RereadValues");
 
-    Q_EMIT volumeChanged();
-    qDebug("setFunction");
-}
+    m_Bsp = myLog.channel(1);
+    std::cout << myLog.channel(1) << std::endl;
+    qDebug(QString::number(m_Bsp,'f',3).toStdString().c_str());
+    Q_EMIT BspStringChanged();
 
-QString ParseCSV::volume()
-{
-    double localVolume = this->m_lenght * this->m_width * this->m_height;
+    m_Awa = myLog.channel(2);
+    Q_EMIT AwaStringChanged();
 
-    qDebug("VolumeFunction");
-    //    m_volume = QString::number(localVolume);
+    m_PVmg = myLog.channel(66);
+    Q_EMIT PVmgStringChanged();
 
-    //    std::ifstream myfile ("/home/hannes/Code/YardPerformanceApp/2015Jul19_0.csv");
+    m_Vmg = 5.5;
+    Q_EMIT VmgStringChanged();
 
-    //    myfile.open ("/home/hannes/Code/YardPerformanceApp/2015Jul19_0.csv");
+    m_AwaOpt = myLog.channel(2);
+    Q_EMIT AwaOptStringChanged();
 
-    //    std::string line;
-
-    //    getline (myfile,line);
-
-    //    myfile.close();
-
-    //    return QString::fromStdString(line);;
-
-
-    std::string fileName = ":/data.dat";
-//    QFile aFile(":/data.dat");
-    QProcess *m_process = new QProcess(this);
-    m_process->start("ls resources/2015Jul19_0.csv");
-    m_process->waitForFinished(-1);
-    QByteArray bytes = m_process->readAllStandardOutput();
-    QString output = QString::fromLocal8Bit(bytes);
-    qDebug(output.toStdString().c_str());
-
-    std::ifstream aFile (fileName);
-    int lines_count=std::count(std::istreambuf_iterator<char>(aFile),
-                               std::istreambuf_iterator<char>(), '\n');
-
-    qDebug(QString::number(lines_count).toStdString().c_str());
-    //    io::CSVReader<3, io::trim_chars<','>> in(fileName);
-    //    in.read_header(io::ignore_extra_column, "Bsp", "Twa", "Tws");
-    //    double VmgPercentSum = 0;
-    //    double VmgPercent, Bsp, Twa, Tws;
-    //    int counterLines = 0;
-    //    int counterValidLines = 0;
-    //    int offsetForCounter = lines_count - (m_lenght*60*2);
-
-    //    while(in.read_row(Bsp,Twa,Tws)){
-    //        if(counterLines > offsetForCounter)
-    //        {
-    //            VmgPercent = /*std::cos(Twa/57.3)**/Bsp;
-    //            VmgPercentSum += VmgPercent;
-    //            counterValidLines++;
-    //        }
-
-    //        counterLines ++;
-    //    }
-
-    //    double VmgPercentAverage = VmgPercentSum / counterValidLines;
-
-    QString returnString = QString::number(/*VmgPercentAverage*/5);
-
-    returnString.append(" %");
-
-    return returnString;
-
-    //    return localVolume;
 }

@@ -8,6 +8,7 @@ QML_FILES += $$files(*.qml,true) \
 
 CONF_FILES +=  YardPerformace.apparmor \
                YardPerformace.desktop \
+               YardPerformace.json \
                YardPerformace.png
 
 AP_TEST_FILES += tests/autopilot/run \

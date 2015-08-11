@@ -11,16 +11,23 @@ TARGET = $$qtLibraryTarget($$TARGET)
 SOURCES += \
     backend.cpp \
     mytype.cpp \
-    parsecsv.cpp
+    parsecsv.cpp \
+    expbuffer.cpp \
+    explog.cpp \
+    expvalue.cpp \
+    udpport.cpp
 
 HEADERS += \
     backend.h \
     mytype.h \
     parsecsv.h \
-    csv.h
+    csv.h \
+    expbuffer.h \
+    explog.h \
+    expvalue.h \
+    udpport.h
 
-OTHER_FILES = qmldir \
-    data.dat
+OTHER_FILES = qmldir
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     copy_qmldir.target = $$OUT_PWD/qmldir

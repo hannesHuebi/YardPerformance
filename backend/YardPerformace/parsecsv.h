@@ -2,39 +2,48 @@
 #define PARSECSV_H
 
 #include <QObject>
+#include "explog.h"
 
 class ParseCSV : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( QString volume READ volume NOTIFY volumeChanged)
+    Q_PROPERTY( QString BspString READ BspString NOTIFY BspStringChanged)
+    Q_PROPERTY( QString AwaString READ AwaString NOTIFY AwaStringChanged)
+    Q_PROPERTY( QString PVmgString READ PVmgString NOTIFY PVmgStringChanged)
+    Q_PROPERTY( QString VmgString READ VmgString NOTIFY VmgStringChanged)
+    Q_PROPERTY( QString AwaOptString READ AwaOptString NOTIFY AwaOptStringChanged)
 
-    Q_PROPERTY(int lenght READ lenght WRITE setLenght NOTIFY lenghtChanged)
+private:
+    double m_Bsp = 5.5;
+    double m_Awa = 5.5;
+    double m_PVmg= 5.5;
+    double m_Vmg= 5.5;
+    double m_AwaOpt= 5.5;
+    ExpLog myLog;
 
-    int m_lenght;
-    double m_width;
-    double m_height;
-
-//    QString m_volume;
 
 
 public:
     explicit ParseCSV(QObject *parent = 0);
 
-
-
-    Q_INVOKABLE void set_values(double inLenght, double inWidth, double inHeight);
-//    void set_values(QString bla);
-    QString volume();
-    double lenght(){return m_lenght;}
-    void setLenght(int len){m_lenght = len; Q_EMIT volumeChanged();Q_EMIT lenghtChanged();}
+//    Q_INVOKABLE
+    QString BspString(){return QString::number(m_Bsp);}
+    QString AwaString(){return QString::number(m_Awa,'f',0);}
+    QString PVmgString(){return QString::number(m_PVmg);}
+    QString VmgString(){return QString::number(m_Vmg);}
+    QString AwaOptString(){return QString::number(m_AwaOpt);}
 
 Q_SIGNALS:
-    void volumeChanged();
-    void lenghtChanged();
+    void BspStringChanged();
+    void AwaStringChanged();
+    void PVmgStringChanged();
+    void VmgStringChanged();
+    void AwaOptStringChanged();
 
 signals:
 
 public slots:
+    void ReReadValues();
 
 
 };

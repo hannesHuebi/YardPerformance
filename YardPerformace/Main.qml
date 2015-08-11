@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Ubuntu.Components 1.1
 import YardPerformace 1.0
+
 /*!
     \brief MainView with a Label and Button elements.
 */
@@ -10,6 +11,7 @@ MainView {
     // objectName for functional testing purposes (autopilot-qt5)
     objectName: "mainView"
 
+    id: mainView
     // Note! applicationName needs to match the "name" field of the click manifest
     applicationName: "yardperformanceapp.hannes"
 
@@ -25,84 +27,106 @@ MainView {
     width: units.gu(100)
     height: units.gu(75)
 
-    Page {
-        title: i18n.tr("YardPerformace")
+    PageStack {
+        id: pageStack
+        anchors.rightMargin: 0
+        anchors.bottomMargin: 0
+        anchors.leftMargin: 0
+        anchors.topMargin: 0
+        Component.onCompleted: pageStack.push(root)
 
-        MyType {
-            id: myType
+        Page {
+            id: root
 
-            Component.onCompleted: {
-                myType.helloWorld = i18n.tr("Hello world..")
-            }
-        }
+            title: i18n.tr("YardPerformace")
 
-        ParseCSV {
-            id: parser
+            ParseCSV {
+                id: parser
 
-            Component.onCompleted: {
-                parser.lenght = 2;
-            }
-
-        }
-
-        Column {
-            spacing: units.gu(1)
-            anchors {
-                margins: units.gu(2)
-                fill: parent
-            }
-
-            Row{
-                spacing: units.gu(1)
-                Label{
-                    text: "Minutes for Performance calculation:"
+                Component.onCompleted: {
+                    listElements.append({"name": "Bsp", "value": parser.BspString})
+                    listElements.append({"name": "Awa", "value": parser.AwaString})
+                    listElements.append({"name": "%VMG", "value": parser.PVmgString})
+                    listElements.append({"name": "VMG", "value": parser.VmgString})
+                    listElements.append({"name": "AwaOpt", "value": parser.AwaOptString})
                 }
 
-                TextField{
-                    id:xText
-                    text: parser.lenght
-                    onTextChanged: {
-                        parser.lenght = parseInt(this.text)
+                function refreshGridView(){
+                    parser.ReReadValues();
+                    listElements.clear();
+                    listElements.append({"name": "Bsp", "value": parser.BspString})
+                    listElements.append({"name": "Awa", "value": parser.AwaString})
+                    listElements.append({"name": "%VMG", "value": parser.PVmgString})
+                    listElements.append({"name": "VMG", "value": parser.VmgString})
+                    listElements.append({"name": "AwaOpt", "value": parser.AwaOptString})
+                }
+            }
+            Component{
+                id: delegateItem
+                Item {
+                    x: 5
+                    width: gridView1.cellWidth - units.gu(2)
+                    height: gridView1.cellHeight - units.gu(2)
+                    Rectangle {
+                        width: parent.width
+                        height: parent.height
+                        border.color: "black"
+                        border.width: units.gu(0.2)
+                        radius: units.gu(1)
+                        color: mainView.backgroundColor
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Text {
+                            y: units.gu(0.2)
+                            text: name
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            font.bold: false
+                            font.italic: true
+                            font.pixelSize: (parent.height/2) - units.gu(3)
+                        }
+
+                        Text {
+                            y: parent.height / 2
+                            text: value
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            font.bold: true
+                            font.pixelSize: (parent.height/2) - units.gu(3)
+                        }
                     }
                 }
             }
-
-            Label {
-                id: label
+            GridView {
+                id: gridView1
                 width: parent.width
-                height: units.gu(10)
-                objectName: "label"
+                height: parent.height
+                delegate: delegateItem
+                cellHeight: units.gu(12)
+                cellWidth: units.gu(17)
+                model: ListModel {
+                    id: listElements
+                }
 
-                text: parser.volume;
-                fontSize: qsTr("x-large")
-                verticalAlignment: Text.AlignVCenter
-                style: Text.Outline
-                font.bold: true
-                font.family: "Verdana"
-                horizontalAlignment: Text.AlignHCenter
             }
-            Button {
-                objectName: "button"
-                width: parent.width
+//            Button {
+//                text: "Settings"
+//                onClicked: pageStack.push(settings)
+//            }
 
-                text: i18n.tr("Tap me!")
-
-                onClicked: {
-
-
-                    //                    parser.lenght = 5;
-                    //                    parser.width = 5;
-                    //                    parser.height = 5;
-
-                    //                    var result = parser.volume;
-
-                    //                    label.text = result;
-
-
+            Timer {
+                interval: 1000; running: true; repeat: true
+                onTriggered: {
+                    if (root.active)
+                    parser.refreshGridView();
                 }
             }
         }
+        Page{
+            id: settings
+
+            title: i18n.tr("Settings")
+
+        }
     }
+
+
+
 }
-
-
